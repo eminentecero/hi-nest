@@ -1,4 +1,6 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, Res } from '@nestjs/common';
+import { CreateMovieDto } from './dto/create-movie.dto';
+import { UpdateMovieDto } from './dto/update-movie.dto';
 import { Movie } from './entities/movie.entity';
 import { MoviesService } from './movies.service';
 
@@ -22,24 +24,25 @@ export class MoviesController {
     // @Param("id"): id를 요청하는 부분. 요청하고 나서 해당 데이터를 뿌려줌.
     // 뒤에 id: string은 변수명: 변수 타입
     @Get(":id")
-    getOne(@Param("id") id: string): Movie{
+    getOne(@Param("id") id: number): Movie{
         return this.moviesService.getOne(id);
     }
 
     @Post()
-    create(@Body() movieData){
+    create(@Body() movieData: CreateMovieDto){
+        
         return this.moviesService.create(movieData);
     }
 
     @Delete("/:id")
-    remove(@Param("id") movieId: string){
+    remove(@Param("id") movieId: number){
         return this.moviesService.deleteOne(movieId);
     }
     
     // 그냥 updateData를 하면 껍데기 포함 전체가 나와짐.
     // ...을 앞에 붙이면 껍데기가 벗겨진 채로 데이터 반환.
     @Patch('/:id')
-    patch(@Param('id') movieId: string, @Body() updateData){
+    patch(@Param('id') movieId: number, @Body() updateData: UpdateMovieDto){
         return this.moviesService.update(movieId, updateData);
     }
 
